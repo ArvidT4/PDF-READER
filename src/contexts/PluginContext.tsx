@@ -1,9 +1,11 @@
-import {ReactNode, createContext, useContext} from "react"
-import {FormEvent, SyntheticEvent, useRef, useState} from "react";
-import { Worker ,Viewer,Button, Position, Tooltip,PrimaryButton } from '@react-pdf-viewer/core';
+import {ReactNode, createContext, useContext, ReactElement} from "react"
+import {FormEvent, useRef, useState} from "react";
+import {Button, Position, Tooltip,PrimaryButton } from '@react-pdf-viewer/core';
 import * as React from 'react';
-import {DefaultLayoutPlugin, defaultLayoutPlugin} from '@react-pdf-viewer/default-layout';
+import {defaultLayoutPlugin, ToolbarProps} from '@react-pdf-viewer/default-layout';
 import { pageNavigationPlugin } from '@react-pdf-viewer/page-navigation';
+import { dropPlugin } from '@react-pdf-viewer/drop';
+
 
 import {
     highlightPlugin,
@@ -17,19 +19,17 @@ import {
 // Import styles
 import '@react-pdf-viewer/highlight/lib/styles/index.css';
 import '@react-pdf-viewer/default-layout/lib/styles/index.css';
-import '@react-pdf-viewer/page-navigation/lib/styles/index.css';
-
+import '@react-pdf-viewer/drop/lib/styles/index.css';
 import '@react-pdf-viewer/core/lib/styles/index.css';
-import react from "@vitejs/plugin-react";
-import {Note} from "./Interfaces.ts";
+import {Note} from "../Interfaces.ts";
 
 interface IPluginContextContext{
     highlightPluginInstance:any,
-    pageNavigationPluginInstance:any,
     defaultLayoutPluginInstance:any,
+    dropPluginInstance:any,
     notes:Note[],
     setNotes:React.Dispatch<React.SetStateAction<any>>,
-    jumpToHighlightArea:(HighlightArea)=>void
+    jumpToHighlightArea:(HighlightArea)=>void,
 }
 
 const MyContext = createContext<IPluginContextContext|undefined>(undefined)
@@ -70,7 +70,6 @@ const MyPluginContextProvider: React.FC<{children:ReactNode}> = ({children})=>{
             />
         </div>
     );
-
 
     const renderHighlightContent = (props: RenderHighlightContentProps) => {
         const addNote = () => {
@@ -154,23 +153,26 @@ const MyPluginContextProvider: React.FC<{children:ReactNode}> = ({children})=>{
         </div>
     );
 
+
     const highlightPluginInstance = highlightPlugin({
         renderHighlightTarget,
         renderHighlightContent,
         renderHighlights,
     });
+    const dropPluginInstance = dropPlugin();
 
     const { jumpToHighlightArea } = highlightPluginInstance;
-    const pageNavigationPluginInstance = pageNavigationPlugin();
-    const defaultLayoutPluginInstance:DefaultLayoutPlugin = defaultLayoutPlugin();
+    const defaultLayoutPluginInstance=defaultLayoutPlugin();
+
     return (
         <MyContext.Provider value={{
             highlightPluginInstance,
-            pageNavigationPluginInstance,
             defaultLayoutPluginInstance,
+            dropPluginInstance,
             notes,
             setNotes,
-            jumpToHighlightArea}}>
+            jumpToHighlightArea,
+        }}>
             {children}
         </MyContext.Provider>
     )

@@ -1,17 +1,21 @@
-import InputUpload from "./uploader/inputUpload.tsx";
 import ViewUpload from "./uploadAndView/ViewUpload.tsx";
-import {MyPluginContextProvider} from "./PluginContext.tsx";
-import WorkerElement from "./uploader/WorkerElement.tsx";
-import ChatGPT from "./uploader/ChatGPT.tsx";
+import {MyPluginContextProvider} from "./contexts/PluginContext.tsx";
+import {MyHandlePdfContextProvider} from "./contexts/HandlePdfContext.tsx";
+import "./index.css"
+import Wrap from "./Components/Wrap.tsx";
 
 function App() {
 
   return (
-    <>
+    <div>
         <MyPluginContextProvider>
-            <ViewUpload/>
+            <MyHandlePdfContextProvider>
+                <Wrap>
+                    <ViewUpload/>
+                </Wrap>
+            </MyHandlePdfContextProvider>
         </MyPluginContextProvider>
-    </>
+    </div>
   )
 }
 
