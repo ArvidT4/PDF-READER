@@ -10,7 +10,7 @@ import {useMyHandlePdfContextContext} from "../contexts/HandlePdfContext.tsx";
 const PdfWorker= () => {
 
     const {pdfFile}=useMyHandlePdfContextContext()
-    const {notes,jumpToHighlightArea} = useMyPluginContextContext();
+    const {notes,jumpToHighlightArea, highlightPluginInstance} = useMyPluginContextContext();
 
   return (
       <div>
@@ -77,7 +77,7 @@ const PdfWorker= () => {
                               overflow: 'hidden',
                           }}
                       ><div style={{ border: '1px solid rgba(0, 0, 0, 0.3)', height: '100%', overflow: 'hidden' }}>
-                          {pdfFile&&<PdfViewer pdf={pdfFile}/>}
+                          {pdfFile&&<PdfViewer pdf={pdfFile} highlightPlug={highlightPluginInstance}/>}
                       </div>
                       </div>
 

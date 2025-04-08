@@ -5,20 +5,20 @@ import { useMyPluginContextContext } from '../contexts/PluginContext.tsx';
 
 interface Props {
     pdf: string;
+    highlightPlug:any
 }
 
-const PdfViewer: React.FC<Props> = ({ pdf }) => {
+const PdfViewer: React.FC<Props> = ({ pdf,highlightPlug }) => {
     const {
         defaultLayoutPluginInstance,
-        highlightPluginInstance,
     } = useMyPluginContextContext();
 
     // Debugging: Log plugin instances to make sure they're initialized
     React.useEffect(() => {
-        console.log( defaultLayoutPluginInstance, highlightPluginInstance);
-    }, [ defaultLayoutPluginInstance, highlightPluginInstance]);
+        console.log( defaultLayoutPluginInstance, highlightPlug);
+    }, [ defaultLayoutPluginInstance, highlightPlug]);
 
-    if (!defaultLayoutPluginInstance || !highlightPluginInstance) {
+    if (!defaultLayoutPluginInstance || !highlightPlug) {
         return <div>Error: One or more plugin instances are not properly initialized.</div>;
     }
     console.log("test")
@@ -28,7 +28,7 @@ const PdfViewer: React.FC<Props> = ({ pdf }) => {
                 <Viewer
                     fileUrl={pdf}
                     plugins={[
-                        highlightPluginInstance,
+                        highlightPlug,
                         defaultLayoutPluginInstance,
                     ]}
                 />

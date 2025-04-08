@@ -14,17 +14,18 @@ import {useMyHandlePdfContextContext} from "../contexts/HandlePdfContext.tsx";
 import DropComp from "./DropComp.tsx";
 import PdfWorker from "./PdfWorker.tsx";
 import Banner from "../Components/Banner.tsx";
+import {useMyNavigatorContextContext} from "../contexts/NavigatorContext.tsx";
 
 const ViewUpload = () => {
 
     const {notes,jumpToHighlightArea} = useMyPluginContextContext();
 
-
+    const {targetRef} = useMyNavigatorContextContext()
     const {pdfFile}=useMyHandlePdfContextContext()
 
 
   return (
-    <div className={"viewerWrap"}>
+    <div ref={targetRef} className={"viewerWrap"}>
         {pdfFile?<div className={"m-10"} ><PdfWorker/></div>:<DropComp/>}
 
     </div>
