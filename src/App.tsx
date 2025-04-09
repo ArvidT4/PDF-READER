@@ -2,22 +2,27 @@ import ViewUpload from "./uploadAndView/ViewUpload.tsx";
 import {MyPluginContextProvider} from "./contexts/PluginContext.tsx";
 import {MyHandlePdfContextProvider} from "./contexts/HandlePdfContext.tsx";
 import "./index.css"
-import Wrap from "./Components/Wrap.tsx";
+import Homepage from "./routes/Homepage.tsx";
 import {MyNavigatorContextProvider} from "./contexts/NavigatorContext.tsx";
+import ContextProvider from "./contexts/ContextProvider.tsx";
+import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
+import About from "./routes/About.tsx";
+import Contact from "./routes/Contact.tsx";
 
 function App() {
 
   return (
     <div>
-        <MyPluginContextProvider>
-            <MyHandlePdfContextProvider>
-                <MyNavigatorContextProvider>
-                    <Wrap>
-                        <ViewUpload/>
-                    </Wrap>
-                </MyNavigatorContextProvider>
-            </MyHandlePdfContextProvider>
-        </MyPluginContextProvider>
+        <ContextProvider>
+            <Router>
+                <Routes>
+                    <Route path={"/"} element={<Homepage/>}></Route>
+                    <Route path={"/about"} element={<About/>}></Route>
+                    <Route path={"/contact"} element={<Contact/>}></Route>
+                    <Route path={"*"} element={<Homepage/>}></Route>
+                </Routes>
+            </Router>
+        </ContextProvider>
     </div>
   )
 }
