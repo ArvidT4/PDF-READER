@@ -1,4 +1,4 @@
-import {ReactNode, createContext, useContext, ReactElement} from "react"
+import {ReactNode, createContext, useContext, ReactElement, useEffect} from "react"
 import {FormEvent, useRef, useState} from "react";
 import {Button, Position, Tooltip,PrimaryButton } from '@react-pdf-viewer/core';
 import * as React from 'react';
@@ -22,6 +22,7 @@ import '@react-pdf-viewer/default-layout/lib/styles/index.css';
 import '@react-pdf-viewer/drop/lib/styles/index.css';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import {Note} from "../Interfaces.ts";
+import {getNotesFromSession} from "./SessionFunctions.ts";
 
 interface IPluginContextContext{
     highlightPluginInstance:any,
@@ -40,11 +41,9 @@ const MyPluginContextProvider: React.FC<{children:ReactNode}> = ({children})=>{
     const [notes, setNotes] = React.useState<Note[]>([]);
     let noteId = notes.length;
 
+
     const noteEles: Map<number, HTMLElement> = new Map();
 
-    React.useEffect(()=>{
-        console.log(notes)
-    },[notes])
 
     const renderHighlightTarget = (props: RenderHighlightTargetProps) => (
         <div

@@ -11,7 +11,7 @@ import Gradient from "../Components/Gradient.tsx";
 import Footer from "../Components/Footer.tsx";
 import Layout from "../Components/Layout.tsx";
 const Homepage=()=>{
-  console.log(pdf)
+  //console.log(pdf)
   return (
         <Layout>
             <div className={"grid grid-rows-2"}>

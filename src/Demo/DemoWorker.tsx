@@ -17,16 +17,14 @@ import {
 import DemoViewer from "./DemoViewer.tsx";
 const PdfWorker= () => {
     const pdf = ' /utbildningsplan_DSPPG.pdf';  // String path to the PDF in the public folder
-    console.log(pdf);
+    //console.log(pdf);
     const [message, setMessage] = React.useState('');
     const [notes, setNotes] = React.useState<Note[]>([]);
     let noteId = notes.length;
 
     const noteEles: Map<number, HTMLElement> = new Map();
 
-    React.useEffect(()=>{
-        console.log(notes)
-    },[notes])
+
 
     const renderHighlightTarget = (props: RenderHighlightTargetProps) => (
         <div

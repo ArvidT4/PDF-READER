@@ -4,6 +4,7 @@ import PdfViewer from "./PdfViewer.tsx";
 import * as React from "react";
 import {useMyPluginContextContext} from "../contexts/PluginContext.tsx";
 import {useMyHandlePdfContextContext} from "../contexts/HandlePdfContext.tsx";
+import DownloadZip from "../Components/DownloadZip.tsx";
 
 
 
@@ -84,6 +85,7 @@ const PdfWorker= () => {
                   </Worker>
               </div>
           </div>
+          <DownloadZip notes={notes}/>
 
       </div>
   );

@@ -1,56 +1,52 @@
-import {ReactNode, createContext, useContext, useState, useRef, FormEvent} from "react"
+import {ReactNode, createContext, useContext, useState, useRef, FormEvent, useEffect} from "react"
+import {Note} from "../Interfaces.ts";
+import {getNotesFromSession, getPdfFromSession} from "./SessionFunctions.ts";
+import * as React from "react";
+import JSZip from "jszip";
+import {useMyZipContextContext} from "./ZipContext.tsx";
+import {useMyPluginContextContext} from "./PluginContext.tsx";
+import {saveAs} from "file-saver";
 
 interface IHandlePdfContextContext{
-    handleFile:(e:FormEvent<HTMLInputElement>)=>void,
     handle:(file: File)=>void,
     pdfFile:string,
+    setPdfFile:React.Dispatch<React.SetStateAction<any>>,
 }
 
 const MyContext = createContext<IHandlePdfContextContext|undefined>(undefined)
 
 const MyHandlePdfContextProvider: React.FC<{children:ReactNode}> = ({children})=>{
     const [pdfFile,setPdfFile]=useState<string>("");
-    const allowedFiles=['application/pdf'];
+    const allowedFiles=['application/pdf','application/zip','application/x-zip-compressed'];
     const selectedRef=useRef<File|null>(null)
-    const handleFile=(e:FormEvent<HTMLInputElement>)=>{
-        const target =  e.target as HTMLInputElement & { files: FileList };
-        console.log(target);
-        if(target && target.files && target.files[0]){
 
-            selectedRef.current=target.files[0]
-            console.log(selectedRef.current)
+    const readFile=(file:File)=>{
+        let reader = new FileReader();
+        reader.readAsDataURL(file)
 
-            if(selectedRef.current && allowedFiles.includes(selectedRef.current?.type as string)){
-                let reader = new FileReader();
-                reader.readAsDataURL(target.files[0])
-
-                reader.onloadend=(e)=>{
-                    console.log(reader.result);
-                    setPdfFile(reader.result as string);
-                }
-            }
+        reader.onloadend=(e)=>{
+            console.log(reader.result);
+            setPdfFile(reader.result as string);
         }
-
-
-
-        else console.log("nono")
     }
-
-    const handle=(file: File)=>{
+    const {openFolder}=useMyZipContextContext()
+    const handle=async (file: File)=>{
         console.log(file);
         if(file && file){
 
             selectedRef.current=file
-            console.log(selectedRef.current)
+            console.log(selectedRef.current?.type)
 
             if(selectedRef.current && allowedFiles.includes(selectedRef.current?.type as string)){
-                let reader = new FileReader();
-                reader.readAsDataURL(file)
+                if(selectedRef.current?.type as string===allowedFiles[0]) readFile(file);
+                else {
+                    const pdf:string=await openFolder(file);
+                    if(pdf!=""){
+                        setPdfFile(pdf);
 
-                reader.onloadend=(e)=>{
-                    console.log(reader.result);
-                    setPdfFile(reader.result as string);
+                    }
                 }
+
             }
         }
 
@@ -59,11 +55,15 @@ const MyHandlePdfContextProvider: React.FC<{children:ReactNode}> = ({children})=
         else console.log("nono")
     }
 
+    const {notes,setNotes} =useMyPluginContextContext()
+
+
     return (
         <MyContext.Provider value={{
-            handleFile,
             handle,
-            pdfFile}}>
+            pdfFile,
+            setPdfFile,
+        }}>
             {children}
         </MyContext.Provider>
     )

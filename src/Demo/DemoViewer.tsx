@@ -14,12 +14,11 @@ const DemoViewer: React.FC<Props> = ({ pdf,highlightPlug }) => {
         defaultLayoutPluginInstance,
     } = useMyPluginContextContext();
 
-    console.log(pdf);
-    console.log("test")
+
     if (!defaultLayoutPluginInstance || !highlightPlug) {
         return <div>Error: One or more plugin instances are not properly initialized.</div>;
     }
-    console.log("test")
+
     return (
         <div  style={{height:"60vh"}}>
             {pdf && (
