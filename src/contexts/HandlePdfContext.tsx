@@ -1,11 +1,11 @@
 import {ReactNode, createContext, useContext, useState, useRef, FormEvent, useEffect} from "react"
 import {Note} from "../Interfaces.ts";
-import {getNotesFromSession, getPdfFromSession} from "./SessionFunctions.ts";
 import * as React from "react";
 import JSZip from "jszip";
 import {useMyZipContextContext} from "./ZipContext.tsx";
 import {useMyPluginContextContext} from "./PluginContext.tsx";
 import {saveAs} from "file-saver";
+import {useMyIndexedDbContext} from "./IndexedDbContext.tsx";
 
 interface IHandlePdfContextContext{
     handle:(file: File)=>void,
@@ -19,29 +19,31 @@ const MyHandlePdfContextProvider: React.FC<{children:ReactNode}> = ({children})=
     const [pdfFile,setPdfFile]=useState<string>("");
     const allowedFiles=['application/pdf','application/zip','application/x-zip-compressed'];
     const selectedRef=useRef<File|null>(null)
-
+    const {addPDFToDb ,getPDF}=useMyIndexedDbContext()
+    useEffect(() => {
+        getPDF().then((pdf:string)=>{
+            if(pdf!="No PDF found in IndexedDB")setPdfFile(pdf);
+        })
+    }, []);
     const readFile=(file:File)=>{
         let reader = new FileReader();
         reader.readAsDataURL(file)
 
         reader.onloadend=(e)=>{
-            console.log(reader.result);
+            addPDFToDb(reader.result as string);
             setPdfFile(reader.result as string);
         }
     }
     const {openFolder}=useMyZipContextContext()
     const handle=async (file: File)=>{
-        console.log(file);
         if(file && file){
-
             selectedRef.current=file
-            console.log(selectedRef.current?.type)
-
             if(selectedRef.current && allowedFiles.includes(selectedRef.current?.type as string)){
                 if(selectedRef.current?.type as string===allowedFiles[0]) readFile(file);
                 else {
                     const pdf:string=await openFolder(file);
                     if(pdf!=""){
+                        addPDFToDb(pdf as string);
                         setPdfFile(pdf);
 
                     }
@@ -55,7 +57,6 @@ const MyHandlePdfContextProvider: React.FC<{children:ReactNode}> = ({children})=
         else console.log("nono")
     }
 
-    const {notes,setNotes} =useMyPluginContextContext()
 
 
     return (

@@ -2,9 +2,11 @@ import {createContext, ReactNode, useContext} from "react"
 import {useMyPluginContextContext} from "./PluginContext.tsx";
 import JSZip from "jszip";
 import {saveAs} from "file-saver";
+import {useMyIndexedDbContext} from "./IndexedDbContext.tsx";
+import {Note} from "../Interfaces.ts";
 
 interface IZipContextContext{
-    downloadFolder:(pdf:string)=>void
+    downloadFolder:(pdf:string,folder:string)=>void
     openFolder:(file:File)=>Promise<string>
 }
 
@@ -32,7 +34,7 @@ const MyZipContextProvider: React.FC<{children:ReactNode}> = ({children})=>{
         return new Blob([byteArray], { type: "application/pdf" });
     };
 
-    const downloadFolder=(pdf:string)=>{
+    const downloadFolder=(pdf:string,folder:string)=>{
         if(notes&&pdf) {
             const zip = new JSZip();
             const jsonString:string = JSON.stringify(notes,null,2);
@@ -40,12 +42,13 @@ const MyZipContextProvider: React.FC<{children:ReactNode}> = ({children})=>{
 
             zip.file("book.pdf",convertPdfToBlob(pdf))
             zip.generateAsync({type:"blob"}).then((content)=>{
-                saveAs(content,"Your-folder.zip");
+                saveAs(content,folder);
 
             })
         }
 
     }
+    const {addNoteToDb}=useMyIndexedDbContext()
     const openFolder = async (file: File): Promise<string> => {
         const zip: JSZip = await JSZip.loadAsync(file);
 
@@ -54,6 +57,7 @@ const MyZipContextProvider: React.FC<{children:ReactNode}> = ({children})=>{
         if (jsonText) {
             const jsonData = JSON.parse(await jsonText);
             await setNotes(jsonData);
+            jsonData.forEach((obj:Note)=>{ addNoteToDb(obj)})
         }
 
         const pdfBlob = await zip.file("book.pdf")?.async("blob");

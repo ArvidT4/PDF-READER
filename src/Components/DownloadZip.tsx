@@ -1,24 +1,20 @@
 import {useMyZipContextContext} from "../contexts/ZipContext.tsx";
 import {useMyHandlePdfContextContext} from "../contexts/HandlePdfContext.tsx";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import {Note} from "../Interfaces.ts";
+import {b} from "vite/dist/node/moduleRunnerTransport.d-CXw_Ws6P";
+import SavePDF from "./SavePDF.tsx";
 
 interface note{
     notes:Note[]
 }
 const DownloadZip:React.FC<note> = ({notes}) => {
-    const {downloadFolder}=useMyZipContextContext();
-    const {pdfFile}=useMyHandlePdfContextContext();
+    const [show,setShow]=useState<boolean>(false);
 
-    const downloadFolderClient=()=>{
-        if(pdfFile&&notes){
-            downloadFolder(pdfFile);
-        }
-
-    }
     return (
     <div>
-        <button className={"p-3 border"} onClick={downloadFolderClient}>Save PDF</button>
+        <button className={"border rounded-md p-2 m-2 hover:bg-gray-200 duration-300"} onClick={()=>setShow(true)}>Save PDF</button>
+        {show&&<SavePDF setShow={setShow} notes={notes}/>}
     </div>
   );
 };

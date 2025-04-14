@@ -23,6 +23,7 @@ import '@react-pdf-viewer/drop/lib/styles/index.css';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import {Note} from "../Interfaces.ts";
 import {getNotesFromSession} from "./SessionFunctions.ts";
+import {useMyIndexedDbContext} from "./IndexedDbContext.tsx";
 
 interface IPluginContextContext{
     highlightPluginInstance:any,
@@ -31,6 +32,7 @@ interface IPluginContextContext{
     notes:Note[],
     setNotes:React.Dispatch<React.SetStateAction<any>>,
     jumpToHighlightArea:(HighlightArea)=>void,
+    removeHighlight:(note:Note)=>void
 }
 
 const MyContext = createContext<IPluginContextContext|undefined>(undefined)
@@ -40,8 +42,13 @@ const MyPluginContextProvider: React.FC<{children:ReactNode}> = ({children})=>{
     const [message, setMessage] = React.useState('');
     const [notes, setNotes] = React.useState<Note[]>([]);
     let noteId = notes.length;
+    const {addNoteToDb,getAllNotes,deleteNote}=useMyIndexedDbContext()
 
-
+    useEffect(() => {
+        getAllNotes().then(objects=>{
+            setNotes(objects);
+        })
+    }, []);
     const noteEles: Map<number, HTMLElement> = new Map();
 
 
@@ -69,7 +76,6 @@ const MyPluginContextProvider: React.FC<{children:ReactNode}> = ({children})=>{
             />
         </div>
     );
-
     const renderHighlightContent = (props: RenderHighlightContentProps) => {
         const addNote = () => {
             if (message !== '') {
@@ -80,6 +86,7 @@ const MyPluginContextProvider: React.FC<{children:ReactNode}> = ({children})=>{
                     quote: props.selectedText,
                 };
                 setNotes(notes.concat([note]));
+                addNoteToDb(note)
                 props.cancel();
             }
         };
@@ -121,11 +128,16 @@ const MyPluginContextProvider: React.FC<{children:ReactNode}> = ({children})=>{
         );
     };
     const jumpToNote = (note: Note) => {
-        // Om vi har en referens till highlight-området
         if (note.highlightAreas && note.highlightAreas.length > 0) {
             highlightPluginInstance.jumpToHighlightArea(note.highlightAreas[0]);
         }
     };
+    const removeHighlight=(note:Note)=>{
+        deleteNote(note.id).then((success:boolean)=>{
+            console.log("test", success)
+            if(success) setNotes(prevNotes => prevNotes.filter(n => n.id !== note.id));
+        })
+    }
 
     const renderHighlights = (props: RenderHighlightsProps) => (
         <div>
@@ -171,6 +183,7 @@ const MyPluginContextProvider: React.FC<{children:ReactNode}> = ({children})=>{
             notes,
             setNotes,
             jumpToHighlightArea,
+            removeHighlight
         }}>
             {children}
         </MyContext.Provider>

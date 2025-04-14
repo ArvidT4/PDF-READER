@@ -5,16 +5,22 @@ import * as React from "react";
 import {useMyPluginContextContext} from "../contexts/PluginContext.tsx";
 import {useMyHandlePdfContextContext} from "../contexts/HandlePdfContext.tsx";
 import DownloadZip from "../Components/DownloadZip.tsx";
+import DeleteNoteButton from "../Components/DeleteNoteButton.tsx";
+import RemovePDFAndNotes from "../Components/RemovePDFAndNotes.tsx";
 
 
 
 const PdfWorker= () => {
 
     const {pdfFile}=useMyHandlePdfContextContext()
-    const {notes,jumpToHighlightArea, highlightPluginInstance} = useMyPluginContextContext();
+    const {notes,jumpToHighlightArea, highlightPluginInstance, removeHighlight} = useMyPluginContextContext();
 
   return (
       <div>
+          <div className={"flex place-content-end"}>
+              <DownloadZip notes={notes}/>
+              <RemovePDFAndNotes/>
+          </div>
           <div
               style={{
                   border: '1px solid rgba(0, 0, 0, 0.3)',
@@ -56,7 +62,7 @@ const PdfWorker= () => {
                                   {note.quote}
                               </blockquote>
                               {note.content}
-                              <div>Ta bort</div>
+                              <DeleteNoteButton note={note}/>
                           </div>
 
                       );
@@ -85,7 +91,6 @@ const PdfWorker= () => {
                   </Worker>
               </div>
           </div>
-          <DownloadZip notes={notes}/>
 
       </div>
   );
