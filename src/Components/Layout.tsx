@@ -1,7 +1,10 @@
 import Footer from "./Footer.tsx";
 import NavigationBar from "./NavigationBar.tsx";
-
-const Layout:React.FC = ({children}) => {
+import React, {ReactNode} from "react";
+interface Props {
+    children: ReactNode;
+}
+const Layout:React.FC<Props>= ({children}) => {
   return (
     <div className={"flex flex-col min-h-screen"}>
 

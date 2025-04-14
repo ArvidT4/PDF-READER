@@ -1,13 +1,10 @@
 import {Note} from "../Interfaces.ts";
 import {Worker} from "@react-pdf-viewer/core";
 import * as React from "react";
-import {useMyPluginContextContext} from "../contexts/PluginContext.tsx";
-import PdfViewer from "../uploadAndView/PdfViewer.tsx";
 import {Button, Position, Tooltip,PrimaryButton } from '@react-pdf-viewer/core';
 
 import {
     highlightPlugin,
-    HighlightArea,
     MessageIcon,
     RenderHighlightContentProps,
     RenderHighlightsProps,
@@ -17,7 +14,6 @@ import {
 import DemoViewer from "./DemoViewer.tsx";
 const PdfWorker= () => {
     const pdf = ' /utbildningsplan_DSPPG.pdf';  // String path to the PDF in the public folder
-    //console.log(pdf);
     const [message, setMessage] = React.useState('');
     const [notes, setNotes] = React.useState<Note[]>([]);
     let noteId = notes.length;

@@ -1,7 +1,5 @@
-import {ReactNode, createContext, useContext, useRef} from "react"
+import {ReactNode, createContext, useContext} from "react"
 import {DBNote, DBPDF, Note} from "../Interfaces.ts";
-import {HighlightArea} from "@react-pdf-viewer/highlight";
-import {qunit} from "globals";
 
 interface IIndexedDbContext{
     addNoteToDb:(note:Note)=>void,
@@ -21,17 +19,17 @@ const MyIndexedDbContextProvider: React.FC<{children:ReactNode}> = ({children})=
     const getDB=(indexedDBName:string,DBName:string):Promise<IDBDatabase>=>{
         return  new Promise<IDBDatabase>((resolve,reject)=>{
             const request = indexedDB.open(indexedDBName,1);
-            request.onupgradeneeded=function(event){
+            request.onupgradeneeded=function(){
 
                 const db=request.result;
                 if(!db.objectStoreNames.contains(indexedDBName)){
                     db.createObjectStore(DBName,{ keyPath: "id", autoIncrement: true })
                 }
             }
-            request.onsuccess=function (event){
+            request.onsuccess=function (){
                 resolve(request.result);
             }
-            request.onerror=function (event){
+            request.onerror=function (){
                 reject(request.result);
             }
 
@@ -79,7 +77,7 @@ const MyIndexedDbContextProvider: React.FC<{children:ReactNode}> = ({children})=
             const tx = db.transaction(NOTES_DB_NAME, "readwrite");
             const store = tx.objectStore(NOTES_DB_NAME);
 
-            return new Promise<boolean>((resolve, reject) => {
+            return new Promise<boolean>((resolve) => {
                 const getAllRequest = store.getAll();
 
                 getAllRequest.onsuccess = () => {
@@ -134,21 +132,6 @@ const MyIndexedDbContextProvider: React.FC<{children:ReactNode}> = ({children})=
                 const notes:Note[]=[];
                 result.forEach((obj)=>{notes.push(obj.note)})
                 resolve(notes);
-            };
-            request.onerror = () => reject(request.error);
-        });
-    }
-    async function getAllNotesAsDB(): Promise<DBNote[]> {
-        const db = await getDB(INDEXED_DB_NAME[0],NOTES_DB_NAME);
-        const tx = db.transaction("notes", "readonly");
-        const store = tx.objectStore("notes");
-        const request = store.getAll();
-
-
-        return new Promise<DBNote[]>((resolve, reject) => {
-            request.onsuccess = () => {
-                const result = request.result as DBNote[];
-                resolve(result);
             };
             request.onerror = () => reject(request.error);
         });

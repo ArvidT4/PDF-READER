@@ -1,5 +1,3 @@
-
-// PdfViewer.tsx
 import { Viewer } from '@react-pdf-viewer/core';
 import * as React from 'react';
 import { useMyPluginContextContext } from '../contexts/PluginContext.tsx';

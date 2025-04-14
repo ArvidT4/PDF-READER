@@ -1,10 +1,6 @@
-import {ReactNode, createContext, useContext, useState, useRef, FormEvent, useEffect} from "react"
-import {Note} from "../Interfaces.ts";
+import {ReactNode, createContext, useContext, useState, useRef, useEffect} from "react"
 import * as React from "react";
-import JSZip from "jszip";
 import {useMyZipContextContext} from "./ZipContext.tsx";
-import {useMyPluginContextContext} from "./PluginContext.tsx";
-import {saveAs} from "file-saver";
 import {useMyIndexedDbContext} from "./IndexedDbContext.tsx";
 
 interface IHandlePdfContextContext{
@@ -29,7 +25,7 @@ const MyHandlePdfContextProvider: React.FC<{children:ReactNode}> = ({children})=
         let reader = new FileReader();
         reader.readAsDataURL(file)
 
-        reader.onloadend=(e)=>{
+        reader.onloadend=()=>{
             addPDFToDb(reader.result as string);
             setPdfFile(reader.result as string);
         }

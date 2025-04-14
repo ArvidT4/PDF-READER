@@ -1,10 +1,10 @@
-import React, {useCallback} from 'react'
+import {useCallback} from 'react'
 import {useDropzone} from 'react-dropzone'
 import {useMyHandlePdfContextContext} from "../contexts/HandlePdfContext.tsx";
 import drop from "../pictures/drop.png"
 const DropComp = () => {
     const {handle}=useMyHandlePdfContextContext()
-    const onDrop = useCallback(acceptedFiles => {
+    const onDrop = useCallback((acceptedFiles: File[]) => {
         console.log(acceptedFiles)
         handle(acceptedFiles[0])
     }, [])

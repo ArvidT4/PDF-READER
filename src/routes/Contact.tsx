@@ -1,4 +1,3 @@
-import NavigationBar from "../Components/NavigationBar.tsx";
 import Gradient from "../Components/Gradient.tsx";
 import { useRef } from "react";
 import emailjs from "emailjs-com";
@@ -22,11 +21,11 @@ const Contact = () => {
                 )
                 .then(
                     (result) => {
-                        alert("Message sent successfully!");
+                        alert("Message sent successfully!" + result);
                         formRef.current?.reset();
                     },
                     (error) => {
-                        alert("Something went wrong. Please try again.");
+                        alert("Something went wrong. Please try again." + error);
                     }
                 );
         };

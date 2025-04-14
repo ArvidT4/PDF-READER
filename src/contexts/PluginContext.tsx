@@ -1,9 +1,7 @@
-import {ReactNode, createContext, useContext, ReactElement, useEffect} from "react"
-import {FormEvent, useRef, useState} from "react";
+import {ReactNode, createContext, useContext, useEffect} from "react"
 import {Button, Position, Tooltip,PrimaryButton } from '@react-pdf-viewer/core';
 import * as React from 'react';
-import {defaultLayoutPlugin, ToolbarProps} from '@react-pdf-viewer/default-layout';
-import { pageNavigationPlugin } from '@react-pdf-viewer/page-navigation';
+import {defaultLayoutPlugin} from '@react-pdf-viewer/default-layout';
 import { dropPlugin } from '@react-pdf-viewer/drop';
 
 
@@ -16,13 +14,12 @@ import {
     RenderHighlightTargetProps,
 
 } from '@react-pdf-viewer/highlight';
-// Import styles
+
 import '@react-pdf-viewer/highlight/lib/styles/index.css';
 import '@react-pdf-viewer/default-layout/lib/styles/index.css';
 import '@react-pdf-viewer/drop/lib/styles/index.css';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import {Note} from "../Interfaces.ts";
-import {getNotesFromSession} from "./SessionFunctions.ts";
 import {useMyIndexedDbContext} from "./IndexedDbContext.tsx";
 
 interface IPluginContextContext{
@@ -31,7 +28,7 @@ interface IPluginContextContext{
     dropPluginInstance:any,
     notes:Note[],
     setNotes:React.Dispatch<React.SetStateAction<any>>,
-    jumpToHighlightArea:(HighlightArea)=>void,
+    jumpToHighlightArea:(area:HighlightArea)=>void,
     removeHighlight:(note:Note)=>void
 }
 

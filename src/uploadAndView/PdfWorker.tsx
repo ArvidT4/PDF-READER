@@ -1,7 +1,6 @@
 import {Note} from "../Interfaces.ts";
 import {Worker} from "@react-pdf-viewer/core";
 import PdfViewer from "./PdfViewer.tsx";
-import * as React from "react";
 import {useMyPluginContextContext} from "../contexts/PluginContext.tsx";
 import {useMyHandlePdfContextContext} from "../contexts/HandlePdfContext.tsx";
 import DownloadZip from "../Components/DownloadZip.tsx";
@@ -13,7 +12,7 @@ import RemovePDFAndNotes from "../Components/RemovePDFAndNotes.tsx";
 const PdfWorker= () => {
 
     const {pdfFile}=useMyHandlePdfContextContext()
-    const {notes,jumpToHighlightArea, highlightPluginInstance, removeHighlight} = useMyPluginContextContext();
+    const {notes,jumpToHighlightArea, highlightPluginInstance} = useMyPluginContextContext();
 
   return (
       <div>

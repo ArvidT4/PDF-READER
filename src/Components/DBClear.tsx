@@ -21,7 +21,6 @@ const DBClear:React.FC<props> = ({setShow}) => {
         setShow(false);
     }
     const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
-        // Close only if the user clicked directly on the backdrop (not the box)
         if (e.target === e.currentTarget) {
             setShow(false);
         }

@@ -1,6 +1,4 @@
-import NavigationBar from "../Components/NavigationBar.tsx";
 import Gradient from "../Components/Gradient.tsx";
-import Footer from "../Components/Footer.tsx";
 import Layout from "../Components/Layout.tsx";
 
 const About = () => {

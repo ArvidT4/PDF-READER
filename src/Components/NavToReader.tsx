@@ -1,4 +1,3 @@
-import {useRef} from "react";
 import {useMyNavigatorContextContext} from "../contexts/NavigatorContext.tsx";
 
 const NavToReader = () => {
