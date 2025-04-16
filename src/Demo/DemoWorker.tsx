@@ -13,7 +13,7 @@ import {
 } from '@react-pdf-viewer/highlight';
 import DemoViewer from "./DemoViewer.tsx";
 const PdfWorker= () => {
-    const pdf = ' /utbildningsplan_DSPPG.pdf';  // String path to the PDF in the public folder
+    const pdf = ' /pdf-placeholder.pdf';  // String path to the PDF in the public folder
     const [message, setMessage] = React.useState('');
     const [notes, setNotes] = React.useState<Note[]>([]);
     let noteId = notes.length;
