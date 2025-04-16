@@ -35,6 +35,9 @@ const Contact = () => {
             <h1 className={"text-2xl text-white col-span-2 m-auto font-mono"}>Contact</h1>
         </Gradient>
         <div>
+            <div className={"w-96 text-center m-auto"}>
+                If you find any bug or want me to add another feature to the PDF reader, feel free to contact me through this contact form.
+            </div>
             <form
                 ref={formRef}
                 onSubmit={sendEmail}
