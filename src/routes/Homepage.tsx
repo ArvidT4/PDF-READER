@@ -19,7 +19,7 @@ const Homepage=()=>{
                     </div>
                     <DemoWrap/>
                 </Gradient>
-                <div className={"w-screen"}>
+                <div>
                     <ViewUpload/>
                 </div>
             </div>

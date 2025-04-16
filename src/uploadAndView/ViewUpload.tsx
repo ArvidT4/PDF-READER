@@ -15,8 +15,8 @@ const ViewUpload = () => {
 
 
   return (
-    <div ref={targetRef} className={"viewerWrap"}>
-        {pdfFile?<div className={"m-10"} ><PdfWorker/></div>:<DropComp/>}
+    <div ref={targetRef}>
+        {pdfFile?<div className={"mt-10 mb-10"} ><PdfWorker/></div>:<DropComp/>}
 
     </div>
   )
