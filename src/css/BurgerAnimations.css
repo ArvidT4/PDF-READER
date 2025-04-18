@@ -1,0 +1,49 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.wrap{
+    @apply m-0
+}
+.lineWrap{
+    @apply w-12 h-12 m-auto border justify-items-center pt-3 rounded-md
+}
+/*Not pressed*/
+.top{
+    @apply bg-black w-8 h-1 relative top-0 transition-all duration-300 rounded-md
+}
+.center{
+    @apply bg-black w-8 h-1 opacity-100 relative top-2 transition-all duration-300 rounded-md
+}
+.bot{
+    @apply bg-black w-8 h-1 relative top-4 transition-all duration-300 rounded-md
+}
+/*Duration pressed*/
+.durTop{
+    @apply relative bg-green-200 w-8 h-1 top-3 transition-all duration-300 rounded-md
+}
+.durCenter{
+    @apply relative bg-green-500 w-8 h-1 top-2 transition-all duration-300 rounded-md
+}
+.durBot{
+    @apply relative bg-green-700 w-8 h-1 transition-all duration-300 top-1 rounded-md
+}
+/*Pressed*/
+.lineTop{
+    @apply relative bg-green-500 w-8 h-1 top-3 rotate-45 transition-all duration-300 rounded-md
+}
+.lineCenter{
+    @apply relative bg-green-500 w-8 h-1 top-2 opacity-0 transition-all duration-300 rounded-md
+}
+.lineBot{
+    @apply relative bg-green-500 w-8 h-1 top-1 rotate-[-45deg] transition-all duration-300 rounded-md
+}
+
+.contentHide {
+    @apply max-h-0 overflow-hidden opacity-0 duration-300 transition-all;
+}
+
+/* Show state */
+.contentShow {
+    @apply max-h-96 overflow-hidden opacity-100 duration-300 transition-all m-2 text-lg;
+}

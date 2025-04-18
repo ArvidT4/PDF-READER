@@ -1,0 +1,6 @@
+.notesShow{
+    @apply w-80 overflow-auto border-r duration-300 transition-all
+}
+.notesHide{
+    @apply hidden w-20 overflow-auto border-r duration-300 transition-all
+}

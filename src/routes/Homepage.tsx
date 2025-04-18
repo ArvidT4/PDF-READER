@@ -8,16 +8,21 @@ import Layout from "../Components/Layout.tsx";
 const Homepage=()=>{
   return (
         <Layout>
-            <div className={"grid grid-rows-2"}>
+            <div className={"grid sm:grid-rows-2"}>
                 <Gradient>
                     <div>
                         <Banner/>
-                        <div className={"grid grid-cols-2 mt-20"}>
-                            <NavToReader/>
-                            <DemoPicture/>
+                        <div className={"sm:grid sm:grid-cols-2 mt-20"}>
+
+                            <div className={"sm:block hidden"}>
+                                <NavToReader/>
+                                <DemoPicture/>
+                            </div>
                         </div>
                     </div>
-                    <DemoWrap/>
+                    <div className={"sm:block hidden"}>
+                        <DemoWrap/>
+                    </div>
                 </Gradient>
                 <div>
                     <ViewUpload/>

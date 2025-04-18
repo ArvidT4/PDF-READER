@@ -1,6 +1,6 @@
 const Footer = () => {
   return (
-    <div className={"bg-gray-100 w-full h-40 border-t border-gray-400 flex flex-col"}>
+    <div className={"bg-gray-100 w-full h-40 border-t border-gray-400 flex flex-col mt-20"}>
         <ul className={"grid grid-rows-2 grid-cols-3 w-1/2 m-auto mt-20 flex-1"}>
           <li className={"m-auto hover:text-gray-600 duration-300 cursor-pointer font-mono"}> <a href={"/"}>Home</a> </li>
           <li className={"m-auto hover:text-gray-600 duration-300 cursor-pointer font-mono"}> <a href={"/about"}>About</a> </li>
