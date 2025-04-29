@@ -24,6 +24,7 @@ const PdfWorker= () => {
               <div className={"sm:hidden block"}>
                   <button onClick={()=>setShow(!show)} className={"border p-2 rounded-md"}>Notes</button>
               </div>
+
               <div className={"col-start-2 sm:flex sm:place-self-end grid grid-cols-2"}>
                   <DownloadZip notes={notes}/>
                   <RemovePDFAndNotes/>
