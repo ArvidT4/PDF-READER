@@ -1,9 +1,5 @@
-import ViewUpload from "./uploadAndView/ViewUpload.tsx";
-import {MyPluginContextProvider} from "./contexts/PluginContext.tsx";
-import {MyHandlePdfContextProvider} from "./contexts/HandlePdfContext.tsx";
 import "./index.css"
 import Homepage from "./routes/Homepage.tsx";
-import {MyNavigatorContextProvider} from "./contexts/NavigatorContext.tsx";
 import ContextProvider from "./contexts/ContextProvider.tsx";
 import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
 import About from "./routes/About.tsx";

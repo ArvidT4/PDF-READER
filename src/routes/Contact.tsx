@@ -1,4 +1,3 @@
-import NavigationBar from "../Components/NavigationBar.tsx";
 import Gradient from "../Components/Gradient.tsx";
 import { useRef } from "react";
 import emailjs from "emailjs-com";
@@ -22,11 +21,11 @@ const Contact = () => {
                 )
                 .then(
                     (result) => {
-                        alert("Message sent successfully!");
+                        alert("Message sent successfully!" + result);
                         formRef.current?.reset();
                     },
                     (error) => {
-                        alert("Something went wrong. Please try again.");
+                        alert("Something went wrong. Please try again." + error);
                     }
                 );
         };
@@ -36,6 +35,9 @@ const Contact = () => {
             <h1 className={"text-2xl text-white col-span-2 m-auto font-mono"}>Contact</h1>
         </Gradient>
         <div>
+            <div className={"w-96 text-center m-auto"}>
+                If you find any bug or want me to add another feature to the PDF reader, feel free to contact me through this contact form.
+            </div>
             <form
                 ref={formRef}
                 onSubmit={sendEmail}

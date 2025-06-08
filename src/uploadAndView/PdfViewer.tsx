@@ -1,4 +1,3 @@
-// PdfViewer.tsx
 import { Viewer } from '@react-pdf-viewer/core';
 import * as React from 'react';
 import { useMyPluginContextContext } from '../contexts/PluginContext.tsx';
@@ -15,13 +14,13 @@ const PdfViewer: React.FC<Props> = ({ pdf,highlightPlug }) => {
 
     // Debugging: Log plugin instances to make sure they're initialized
     React.useEffect(() => {
-        console.log( defaultLayoutPluginInstance, highlightPlug);
+        //console.log( defaultLayoutPluginInstance, highlightPlug);
     }, [ defaultLayoutPluginInstance, highlightPlug]);
 
     if (!defaultLayoutPluginInstance || !highlightPlug) {
         return <div>Error: One or more plugin instances are not properly initialized.</div>;
     }
-    console.log("test")
+   // console.log(pdf)
     return (
         <div  style={{height:"90vh"}}>
             {pdf && (

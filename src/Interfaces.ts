@@ -6,3 +6,11 @@ export interface Note {
     highlightAreas: HighlightArea[];
     quote: string;
 }
+export interface DBNote{
+    id:number,
+    note:Note
+}
+export interface DBPDF{
+    id:number,
+    pdf:string
+}

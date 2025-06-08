@@ -1,12 +1,10 @@
-import React, {FormEvent, useCallback, useRef, useState} from 'react'
-import dropStyle from "../CSS/drop.module.css"
+import {useCallback} from 'react'
 import {useDropzone} from 'react-dropzone'
-import {useMyPluginContextContext} from "../contexts/PluginContext.tsx";
 import {useMyHandlePdfContextContext} from "../contexts/HandlePdfContext.tsx";
 import drop from "../pictures/drop.png"
 const DropComp = () => {
-    const {pdfFile,handle}=useMyHandlePdfContextContext()
-    const onDrop = useCallback(acceptedFiles => {
+    const {handle}=useMyHandlePdfContextContext()
+    const onDrop = useCallback((acceptedFiles: File[]) => {
         console.log(acceptedFiles)
         handle(acceptedFiles[0])
     }, [])
