@@ -4,6 +4,7 @@ import ContextProvider from "./contexts/ContextProvider.tsx";
 import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
 import About from "./routes/About.tsx";
 import Contact from "./routes/Contact.tsx";
+import SignUp from "./routes/SignUp.tsx";
 
 function App() {
 
@@ -15,6 +16,7 @@ function App() {
                     <Route path={"/"} element={<Homepage/>}></Route>
                     <Route path={"/about"} element={<About/>}></Route>
                     <Route path={"/contact"} element={<Contact/>}></Route>
+                    <Route path={"signUp"} element={<SignUp/>}></Route>
                     <Route path={"*"} element={<Homepage/>}></Route>
                 </Routes>
             </Router>
