@@ -14,3 +14,7 @@ export interface DBPDF{
     id:number,
     pdf:string
 }
+export interface IUser{
+    email:string,
+    password:string
+}
