@@ -1,11 +1,13 @@
 import React, {ChangeEvent, Dispatch, SetStateAction, useEffect, useState} from "react";
 import {useMyUserContext} from "../contexts/UserContext.tsx";
 import {IUser} from "../Interfaces.ts";
+import {useNavigate} from "react-router-dom";
 
 const SignUp=()=>{
     const [email,setEmail]=useState<string>("")
     const [password,setPassword]=useState<string>("")
     const {signUp,secret}=useMyUserContext()
+    const navigate=useNavigate()
     const handleChange=(e:ChangeEvent<HTMLInputElement>,set:Dispatch<SetStateAction<string>>)=>{
         set(e.target.value)
     }
@@ -13,11 +15,13 @@ const SignUp=()=>{
         console.log(email)
     }, [email]);
 
-    const submit=(event: React.FormEvent<HTMLFormElement>)=>{
+    const submit=async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
         console.log("WAP")
-        const user:IUser = {email,password}
-        signUp(user)
+        const user: IUser = {email, password}
+        const response:boolean = await signUp(user)
+        console.log(response)
+        if (response) navigate("/dashboard")
     }
     return(
         <div>
