@@ -2,8 +2,6 @@ import React, {
     ReactNode,
     createContext,
     useContext,
-    useRef,
-    RefObject,
     useCallback,
 } from "react";
 import {IUser} from "../Interfaces.ts";
@@ -12,10 +10,11 @@ import {createClient, SupabaseClient} from '@supabase/supabase-js';
 
 interface IUserContext {
     signUp:(user:IUser)=>Promise<boolean>,
-    secret:()=>void
-    googleSignUp:()=>void
-    supabase:SupabaseClient
-    checkSession:()=>boolean
+    secret:()=>void,
+    googleSignUp:()=>void,
+    supabase:SupabaseClient,
+    checkSession:()=>Promise<boolean>,
+    signIn:(user:IUser)=>Promise<boolean>,
 }
 
 const MyContext = createContext<IUserContext | undefined>(undefined);
@@ -39,7 +38,7 @@ const MyUserContextProvider: React.FC<{ children: ReactNode }> = ({ children }) 
 
         if (token) {
             try {
-                let response:AxiosResponse=await axios.post(
+                const response:AxiosResponse=await axios.post(
                     "http://localhost:3000/users/auth",
                     {},
                     {
@@ -51,11 +50,40 @@ const MyUserContextProvider: React.FC<{ children: ReactNode }> = ({ children }) 
                 return true;
             } catch (err) {
                 console.error("Token verification failed:", err);
+                return false
             }
         }
         return false;
     };
+    const signIn = useCallback(async (user:IUser):Promise<boolean> => {
+        try{
+            const response:AxiosResponse = await axios.post('http://localhost:3000/users/signIn', {
+                email: user.email,
+                password: user.password,
+            }, {
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                withCredentials: true
+            });
+            if(response.data.code==='user_already_exists'){
+                console.log("not good email already used")
+                return false
+            }
+            else if(response.data.success){
+                console.log("success")
 
+                console.log(response)
+
+                return true
+            }
+            return false
+        }
+        catch(error){
+            console.log(error)
+            return false
+        }
+    }, []);
 
     const signUp = useCallback(async (user:IUser):Promise<boolean> => {
         try{
@@ -83,6 +111,7 @@ const MyUserContextProvider: React.FC<{ children: ReactNode }> = ({ children }) 
         }
         catch(error){
             console.log(error)
+            return false
         }
     }, []);
     const secret = async () => {
@@ -97,7 +126,7 @@ const MyUserContextProvider: React.FC<{ children: ReactNode }> = ({ children }) 
         }
     };
     return (
-        <MyContext.Provider value={{signUp ,secret,googleSignUp,supabase,checkSession}}>
+        <MyContext.Provider value={{signUp ,secret,googleSignUp,supabase,checkSession,signIn}}>
             {children}
         </MyContext.Provider>
     );

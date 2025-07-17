@@ -18,3 +18,10 @@ export interface IUser{
     email:string,
     password:string
 }
+export interface IPdfs{
+    id:string,
+    created_at:Date|string,
+    user_id:string
+    title:string,
+    filepath:string
+}

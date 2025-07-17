@@ -7,7 +7,7 @@ import Contact from "./routes/Contact.tsx";
 import SignUp from "./routes/SignUp.tsx";
 import SignIn from "./routes/SignIn.tsx";
 import Login from "./routes/Login.tsx";
-import Dashboard from "./routes/Dashboard.tsx";
+import Dashboard from "./routes/paid-routes/Dashboard.tsx";
 
 function App() {
 

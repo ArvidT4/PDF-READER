@@ -5,6 +5,7 @@ import {MyZipContextProvider} from "./ZipContext.tsx";
 import {MyIndexedDbContextProvider} from "./IndexedDbContext.tsx";
 import {ReactNode} from "react";
 import {MyUserContextProvider} from "./UserContext.tsx";
+import {MyPdfTableContextProvider} from "./PaidContexts/PdfTableContext.tsx";
 interface Props {
     children: ReactNode;
 }
@@ -13,16 +14,18 @@ const ContextProvider:React.FC<Props> = ({children}) => {
     <div>
         <MyIndexedDbContextProvider>
             <MyUserContextProvider>
-                <MyPluginContextProvider>
-                    <MyZipContextProvider>
-                        <MyHandlePdfContextProvider>
-                            <MyNavigatorContextProvider>
+                <MyPdfTableContextProvider>
+                    <MyPluginContextProvider>
+                        <MyZipContextProvider>
+                            <MyHandlePdfContextProvider>
+                                <MyNavigatorContextProvider>
 
-                                {children}
-                            </MyNavigatorContextProvider>
-                        </MyHandlePdfContextProvider>
-                    </MyZipContextProvider>
-                </MyPluginContextProvider>
+                                    {children}
+                                </MyNavigatorContextProvider>
+                            </MyHandlePdfContextProvider>
+                        </MyZipContextProvider>
+                    </MyPluginContextProvider>
+                </MyPdfTableContextProvider>
             </MyUserContextProvider>
         </MyIndexedDbContextProvider>
 
