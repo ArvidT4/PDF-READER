@@ -2,12 +2,16 @@ import {useCallback} from 'react'
 import {useDropzone} from 'react-dropzone'
 import {useMyHandlePdfContextContext} from "../contexts/HandlePdfContext.tsx";
 import drop from "../pictures/drop.png"
-const DropComp = () => {
-    const {handle}=useMyHandlePdfContextContext()
+interface props{
+    handleFunction:(file: File)=>void
+}
+const DropComp:React.FC<props> = ({handleFunction}) => {
+
     const onDrop = useCallback((acceptedFiles: File[]) => {
         console.log(acceptedFiles)
-        handle(acceptedFiles[0])
+        handleFunction(acceptedFiles[0])
     }, [])
+
     const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
 
 
@@ -21,8 +25,8 @@ const DropComp = () => {
                 <img className={"w-20 m-auto pointer-events-none select-none focus:outline-none"} src={drop} alt={"test"}/>
             {
                 isDragActive ?
-                        <p>Drop the files here ...</p>:
-                        <p>Drag 'n' drop some files here, or click to select files</p>
+                        <p className={"text-black"}>Drop the files here ...</p>:
+                        <p className={"text-black"}>Drag 'n' drop some files here, or click to select files</p>
             }
             </div>
         </div>

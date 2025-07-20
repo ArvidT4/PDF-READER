@@ -8,6 +8,7 @@ import PdfWorker from "./PdfWorker.tsx";
 import {useMyNavigatorContextContext} from "../contexts/NavigatorContext.tsx";
 
 const ViewUpload = () => {
+    const {handle}=useMyHandlePdfContextContext()
 
 
     const {targetRef} = useMyNavigatorContextContext()
@@ -16,7 +17,7 @@ const ViewUpload = () => {
 
   return (
     <div ref={targetRef}>
-        {pdfFile?<div className={"mt-10 mb-10"} ><PdfWorker/></div>:<DropComp/>}
+        {pdfFile?<div className={"mt-10 mb-10"} ><PdfWorker/></div>:<DropComp handleFunction={handle}/>}
 
     </div>
   )

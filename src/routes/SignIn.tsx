@@ -5,8 +5,8 @@ import {useNavigate} from "react-router-dom";
 import {IUser} from "../Interfaces.ts";
 
 const SignIn = () => {
-    const [email,setEmail]=useState<string>("")
-    const [password,setPassword]=useState<string>("")
+    const [email,setEmail]=useState<string>("arvid@arvid")
+    const [password,setPassword]=useState<string>("arvid03")
     const navigate=useNavigate()
     const handleChange=(e:ChangeEvent<HTMLInputElement>,set:Dispatch<SetStateAction<string>>)=>{
         set(e.target.value)

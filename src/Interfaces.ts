@@ -18,7 +18,7 @@ export interface IUser{
     email:string,
     password:string
 }
-export interface IPdfs{
+export interface IMetadata{
     id:string,
     created_at:Date|string,
     user_id:string
