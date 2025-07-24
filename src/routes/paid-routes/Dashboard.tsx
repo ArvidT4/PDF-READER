@@ -29,8 +29,8 @@ const Dashboard = () => {
         </div>
         {pdfs ?<div>
             {pdfs?.length == 0 ? <div>No pdfs uploaded</div> : <div className={"m-3 grid-cols-4 grid"}>
-                {pdfs.map((metadata:IMetadata)=>{
-                    return <PdfTableComponent metadata={metadata}/>
+                {pdfs.map((metadata:IMetadata,key)=>{
+                    return <PdfTableComponent key={key} metadata={metadata}/>
                 })}
             </div>}
         </div>: <div>loading...</div>}

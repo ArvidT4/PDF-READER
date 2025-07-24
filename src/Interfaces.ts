@@ -25,3 +25,6 @@ export interface IMetadata{
     title:string,
     filepath:string
 }
+export interface ISignedUrl{
+    signedUrl:string
+}

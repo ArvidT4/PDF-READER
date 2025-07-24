@@ -1,15 +1,16 @@
 import {ReactNode, createContext, useContext, useState, useRef, useEffect} from "react"
 import * as React from "react";
 import axios, {AxiosResponse} from "axios";
-import {IMetadata, IPdfs} from "../../Interfaces.ts";
+import {IMetadata, ISignedUrl} from "../../Interfaces.ts";
 
 
 interface IPdfTableContext{
     selectPdfsTable:()=>void
     pdfs:IMetadata[]|undefined
-    setPdfs: React.Dispatch<React.SetStateAction<IMetadata[]>>
+    //setPdfs: React.Dispatch<React.SetStateAction<IMetadata[]>>
     handle:(file:File)=>void
     insertPdfTable:(title:string)=>void
+    generatePdfFile:(filePath:string)=>Promise<ISignedUrl|undefined>
 }
 
 const MyContext = createContext<IPdfTableContext|undefined>(undefined)
@@ -37,6 +38,27 @@ const MyPdfTableContextProvider: React.FC<{children:ReactNode}> = ({children})=>
             }
         }
         else console.log("nono")
+    }
+    const generatePdfFile=async (filePath:string):Promise<ISignedUrl|undefined>=>{
+        try{
+            const response:AxiosResponse = await axios.get("http://localhost:3000/pdf/generatePdfFile/",{
+                withCredentials: true,
+
+                headers:{
+                    filePath:filePath
+                }
+            })
+            console.log(response)
+
+            if(response.status==200){
+                return response.data
+            }
+            else return undefined
+        }catch(err){
+            console.log(err)
+            return undefined
+        }
+
     }
     const insertPdfTable = async (title: string) => {
         try {
@@ -83,9 +105,9 @@ const MyPdfTableContextProvider: React.FC<{children:ReactNode}> = ({children})=>
         <MyContext.Provider value={{
             selectPdfsTable,
             pdfs,
-            setPdfs,
             handle,
-            insertPdfTable
+            insertPdfTable,
+            generatePdfFile
         }}>
             {children}
         </MyContext.Provider>
