@@ -8,7 +8,7 @@ const InsertPdf=()=>{
     const handleChange=(e:ChangeEvent<HTMLInputElement>,set:Dispatch<SetStateAction<string>>)=>{
         set(e.target.value)
     }
-    const uploadPdf=async (e)=>{
+    const uploadPdf=async (e:FormEvent<HTMLFormElement>)=>{
         e.preventDefault()
         await insertPdfTable(title)
     }

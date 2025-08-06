@@ -1,7 +1,7 @@
 import {ReactNode, createContext, useContext, useState, useRef, useEffect} from "react"
 import * as React from "react";
 import axios, {AxiosResponse} from "axios";
-import {IMetadata, ISignedUrl} from "../../Interfaces.ts";
+import {IMetadata} from "../../Interfaces.ts";
 
 
 interface IPdfTableContext{
@@ -10,7 +10,7 @@ interface IPdfTableContext{
     //setPdfs: React.Dispatch<React.SetStateAction<IMetadata[]>>
     handle:(file:File)=>void
     insertPdfTable:(title:string)=>void
-    generatePdfFile:(filePath:string)=>Promise<ISignedUrl|undefined>
+    generatePdfFile:(filePath:string)=>Promise<string | undefined>
 }
 
 const MyContext = createContext<IPdfTableContext|undefined>(undefined)
@@ -39,27 +39,32 @@ const MyPdfTableContextProvider: React.FC<{children:ReactNode}> = ({children})=>
         }
         else console.log("nono")
     }
-    const generatePdfFile=async (filePath:string):Promise<ISignedUrl|undefined>=>{
-        try{
-            const response:AxiosResponse = await axios.get("http://localhost:3000/pdf/generatePdfFile/",{
-                withCredentials: true,
-
-                headers:{
-                    filePath:filePath
+    const generatePdfFile = async (filePath: string): Promise<string | undefined> => {
+        try {
+            const response: AxiosResponse<Blob> = await axios.get(
+                "http://localhost:3000/pdf/generatePdfFile/",
+                {
+                    withCredentials: true,
+                    headers: {
+                        filePath: filePath,
+                    },
+                    responseType: "blob", // 👈 CRITICAL for PDF viewer
                 }
-            })
-            console.log(response)
+            );
 
-            if(response.status==200){
-                return response.data
+            if (response.status === 200) {
+                const blob = response.data;
+                const blobUrl = URL.createObjectURL(blob); // 👈 create URL for viewer
+                return blobUrl;
+            } else {
+                return undefined;
             }
-            else return undefined
-        }catch(err){
-            console.log(err)
-            return undefined
+        } catch (err) {
+            console.error(err);
+            return undefined;
         }
+    };
 
-    }
     const insertPdfTable = async (title: string) => {
         try {
             if (pdfFile && title) {

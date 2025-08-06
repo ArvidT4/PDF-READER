@@ -6,6 +6,7 @@ import {MyIndexedDbContextProvider} from "./IndexedDbContext.tsx";
 import {ReactNode} from "react";
 import {MyUserContextProvider} from "./UserContext.tsx";
 import {MyPdfTableContextProvider} from "./PaidContexts/PdfTableContext.tsx";
+import {MyPaidPluginContextProvider} from "./PaidContexts/PaidPluginContext.tsx";
 interface Props {
     children: ReactNode;
 }
@@ -19,8 +20,9 @@ const ContextProvider:React.FC<Props> = ({children}) => {
                         <MyZipContextProvider>
                             <MyHandlePdfContextProvider>
                                 <MyNavigatorContextProvider>
-
-                                    {children}
+                                    <MyPaidPluginContextProvider>
+                                        {children}
+                                    </MyPaidPluginContextProvider>
                                 </MyNavigatorContextProvider>
                             </MyHandlePdfContextProvider>
                         </MyZipContextProvider>

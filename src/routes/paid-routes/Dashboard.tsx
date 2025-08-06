@@ -7,6 +7,7 @@ import {IMetadata} from "../../Interfaces.ts";
 import PdfTableComponent from "../../Components/paid-comps/PdfTableComponent.tsx";
 
 const Dashboard = () => {
+
     const [showInsert,setShowInsert]=useState<boolean>(false)
     const {selectPdfsTable,pdfs}=usePdfTableContext();
     useEffect(() => {
@@ -18,6 +19,7 @@ const Dashboard = () => {
 
         fetchPdfs();
     }, []);
+
   return (
     <div className={"text-white"}>
         <div className={"p-3"}>

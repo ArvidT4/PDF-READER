@@ -8,11 +8,12 @@ import SignUp from "./routes/SignUp.tsx";
 import SignIn from "./routes/SignIn.tsx";
 import Login from "./routes/Login.tsx";
 import Dashboard from "./routes/paid-routes/Dashboard.tsx";
+import PdfWorker from "./routes/paid-routes/PdfWorker.tsx";
 
 function App() {
 
   return (
-    <div className={"min-h-screen bg-black"}>
+    <div className={"min-h-screen bg-white"}>
         <ContextProvider>
             <Router>
                 <Routes>
@@ -23,6 +24,7 @@ function App() {
                     <Route path={"/signIn"} element={<SignIn/>}></Route>
                     <Route path={"/login"} element={<Login/>}></Route>
                     <Route path={"/dashboard"} element={<Dashboard/>}></Route>
+                    <Route path="/dashboard/view/*" element={<PdfWorker />} />
                     <Route path={"*"} element={<Homepage/>}></Route>
                 </Routes>
             </Router>
