@@ -1,20 +1,20 @@
 import {ReactNode} from "react";
 import {usePaidPluginContext} from "../../../contexts/PaidContexts/PaidPluginContext.tsx";
 import { RenderCurrentPageLabelProps } from '@react-pdf-viewer/page-navigation';
-import {ACTIVATED, BOOKMARKS, NOT_ACTIVATED, THUMBNAILS} from "../../../CONSTANTS.ts";
+import {BOOKMARKS, THUMBNAILS} from "../../../CONSTANTS.ts";
 
 interface Props {
     handleClick:(type:string)=>void
     children: ReactNode;
 }
 const PageNavWrap:React.FC<Props>=({children,handleClick})=> {
-    const {pageNavigationPluginInstance,zoomPluginInstance,rotatePluginInstance,thumbnailPluginInstance,fullScreenPluginInstance}=usePaidPluginContext();
+    const {pageNavigationPluginInstance,zoomPluginInstance,rotatePluginInstance,fullScreenPluginInstance,searchPluginInstance}=usePaidPluginContext();
     const { ZoomInButton, ZoomOutButton, } = zoomPluginInstance;
     const { RotateBackwardButton, RotateForwardButton } = rotatePluginInstance;
     const { CurrentPageInput, GoToFirstPageButton, GoToLastPageButton, GoToNextPageButton, GoToPreviousPage,CurrentPageLabel } =
         pageNavigationPluginInstance;
     const {EnterFullScreen}=fullScreenPluginInstance
-
+    const {ShowSearchPopoverButton }=searchPluginInstance;
     return (
         <div>
             <div
@@ -29,15 +29,20 @@ const PageNavWrap:React.FC<Props>=({children,handleClick})=> {
             >
                 {/* Left section */}
                 <div>
-                    <button onClick={()=>handleClick(THUMBNAILS)}>Thumbnails</button>
-                </div>
-                <div>
-                    <button onClick={()=>handleClick(BOOKMARKS)}>bookmarks</button>
+                    <div>
+                        <button onClick={() => handleClick(THUMBNAILS)}>Thumbnails</button>
+                    </div>
+                    <div>
+                        <button onClick={() => handleClick(BOOKMARKS)}>bookmarks</button>
+                    </div>
+                    <div>
+                        <ShowSearchPopoverButton/>
+                    </div>
                 </div>
                 {/* Center section */}
-                <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <div style={{ padding: '0px 2px' }}>
-                        <RotateBackwardButton />
+                <div style={{display: 'flex', alignItems: 'center'}}>
+                    <div style={{padding: '0px 2px'}}>
+                        <RotateBackwardButton/>
                     </div>
                     <div style={{ padding: '0px 2px' }}>
                         <ZoomOutButton />

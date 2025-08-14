@@ -6,6 +6,18 @@ import { rotatePlugin } from '@react-pdf-viewer/rotate';
 import { thumbnailPlugin } from '@react-pdf-viewer/thumbnail';
 import { fullScreenPlugin } from '@react-pdf-viewer/full-screen';
 import { bookmarkPlugin } from '@react-pdf-viewer/bookmark';
+import { searchPlugin } from '@react-pdf-viewer/search';
+import {Note} from "../../Interfaces.ts";
+import {
+    HighlightArea,
+    highlightPlugin,
+    MessageIcon,
+    RenderHighlightContentProps,
+    RenderHighlightsProps,
+    RenderHighlightTargetProps
+} from "@react-pdf-viewer/highlight";
+import {Button, Position, PrimaryButton, Tooltip} from "@react-pdf-viewer/core";
+
 
 
 interface IPluginContext {
@@ -15,11 +27,22 @@ interface IPluginContext {
     thumbnailPluginInstance:ReturnType<typeof thumbnailPlugin>;
     fullScreenPluginInstance:ReturnType<typeof fullScreenPlugin>;
     bookmarkPluginInstance:ReturnType<typeof bookmarkPlugin>;
+    searchPluginInstance:ReturnType<typeof searchPlugin>;
+    highlightPluginInstance:ReturnType<typeof highlightPlugin>,
+    notes:Note[],
+    setNotes:React.Dispatch<React.SetStateAction<Note[]>>,
+    jumpToHighlightArea:(area:HighlightArea)=>void,
+    //removeHighlight:(note:Note)=>void
 }
 
 const MyContext = createContext<IPluginContext | undefined>(undefined);
 
 const MyPaidPluginContextProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+
+    const [message, setMessage] = React.useState('');
+    const [notes, setNotes] = React.useState<Note[]>([]);
+    let noteId = notes.length;
+    
     const pageNavigationPluginInstance = pageNavigationPlugin();
     const zoomPluginInstance = zoomPlugin()
     const rotatePluginInstance = rotatePlugin();
@@ -43,9 +66,145 @@ const MyPaidPluginContextProvider: React.FC<{ children: ReactNode }> = ({ childr
     const thumbnailPluginInstance = thumbnailPlugin({
         thumbnailWidth: 150,
     });
+    const searchPluginInstance = searchPlugin();
+
+    const noteEles: Map<number, HTMLElement> = new Map();
+
+
+    const renderHighlightTarget = (props: RenderHighlightTargetProps) => (
+        <div
+            style={{
+                background: '#eee',
+                display: 'flex',
+                position: 'absolute',
+                left: `${props.selectionRegion.left}%`,
+                top: `${props.selectionRegion.top + props.selectionRegion.height}%`,
+                transform: 'translate(0, 8px)',
+                zIndex: 1,
+            }}
+        >
+            <Tooltip
+                position={Position.TopCenter}
+                target={
+                    <Button onClick={props.toggle}>
+                        <MessageIcon />
+                    </Button>
+                }
+                content={() => <div style={{ width: '100px' }}>Add a note</div>}
+                offset={{ left: 0, top: -8 }}
+            />
+        </div>
+    );
+    const renderHighlightContent = (props: RenderHighlightContentProps) => {
+        const addNote = () => {
+            if (message !== '') {
+                const note: Note = {
+                    id: ++noteId,
+                    content: message,
+                    highlightAreas: props.highlightAreas,
+                    quote: props.selectedText,
+                };
+                setNotes(notes.concat([note]));
+                props.cancel();
+            }
+        };
+
+        return (
+            <div
+                style={{
+                    background: '#fff',
+                    border: '1px solid rgba(0, 0, 0, .3)',
+                    borderRadius: '2px',
+                    padding: '8px',
+                    position: 'absolute',
+                    left: `${props.selectionRegion.left}%`,
+                    top: `${props.selectionRegion.top + props.selectionRegion.height}%`,
+                    zIndex: 1,
+                }}
+            >
+                <div>
+                    <textarea
+                        rows={3}
+                        style={{
+                            border: '1px solid rgba(0, 0, 0, .3)',
+                        }}
+                        onChange={(e) => setMessage(e.target.value)}
+                    ></textarea>
+                </div>
+                <div
+                    style={{
+                        display: 'flex',
+                        marginTop: '8px',
+                    }}
+                >
+                    <div style={{ marginRight: '8px' }}>
+                        <PrimaryButton onClick={addNote}>Add</PrimaryButton>
+                    </div>
+                    <Button onClick={props.cancel}>Cancel</Button>
+                </div>
+            </div>
+        );
+    };
+    const jumpToNote = (note: Note) => {
+        if (note.highlightAreas && note.highlightAreas.length > 0) {
+            highlightPluginInstance.jumpToHighlightArea(note.highlightAreas[0]);
+        }
+    };
+    // const removeHighlight=(note:Note)=>{
+    //     deleteNote(note.id).then((success:boolean)=>{
+    //         console.log("test", success)
+    //         if(success) setNotes(prevNotes => prevNotes.filter(n => n.id !== note.id));
+    //     })
+    // }
+
+    const renderHighlights = (props: RenderHighlightsProps) => (
+        <div>
+            {notes.map((note) => (
+                <React.Fragment key={note.id}>
+                    {note.highlightAreas
+                        .filter((area) => area.pageIndex === props.pageIndex)
+                        .map((area, idx) => (
+                            <div
+                                key={idx}
+                                style={{
+                                    background: 'yellow',
+                                    opacity: 0.4,
+                                    ...props.getCssProperties(area, props.rotation),
+                                }}
+                                onClick={() => jumpToNote(note)}  // Använd jumpToNote istället för scrollIntoView
+                                ref={(ref): void => {
+                                    noteEles.set(note.id, ref as HTMLElement);
+                                }}
+                            />
+                        ))}
+                </React.Fragment>
+            ))}
+        </div>
+    );
+
+
+    const highlightPluginInstance = highlightPlugin({
+        renderHighlightTarget,
+        renderHighlightContent,
+        renderHighlights,
+    });
+    const { jumpToHighlightArea } = highlightPluginInstance;
 
     return (
-        <MyContext.Provider value={{ pageNavigationPluginInstance,zoomPluginInstance,rotatePluginInstance,thumbnailPluginInstance,fullScreenPluginInstance,bookmarkPluginInstance }}>
+        <MyContext.Provider value={{
+            pageNavigationPluginInstance,
+            zoomPluginInstance,
+            rotatePluginInstance,
+            thumbnailPluginInstance,
+            fullScreenPluginInstance,
+            bookmarkPluginInstance,
+            searchPluginInstance,
+            highlightPluginInstance,
+            notes,
+            setNotes,
+            jumpToHighlightArea,
+            //removeHighlight
+        }}>
             {children}
         </MyContext.Provider>
     );

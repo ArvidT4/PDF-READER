@@ -6,6 +6,8 @@ import '@react-pdf-viewer/zoom/lib/styles/index.css';
 import '@react-pdf-viewer/page-navigation/lib/styles/index.css';
 import '@react-pdf-viewer/thumbnail/lib/styles/index.css';
 import '@react-pdf-viewer/bookmark/lib/styles/index.css';
+import '@react-pdf-viewer/search/lib/styles/index.css';
+import '@react-pdf-viewer/highlight/lib/styles/index.css';
 
 import { useEffect, useState } from 'react';
 import { usePdfTableContext } from '../../contexts/PaidContexts/PdfTableContext';
@@ -20,7 +22,9 @@ const PdfWorker = () => {
         rotatePluginInstance,
         thumbnailPluginInstance,
         fullScreenPluginInstance,
-        bookmarkPluginInstance
+        bookmarkPluginInstance,
+        searchPluginInstance,
+        highlightPluginInstance
     } = usePaidPluginContext();
 
     const location = useLocation();
@@ -84,7 +88,9 @@ const PdfWorker = () => {
                                         rotatePluginInstance,
                                         thumbnailPluginInstance,
                                         fullScreenPluginInstance,
-                                        bookmarkPluginInstance
+                                        bookmarkPluginInstance,
+                                        searchPluginInstance,
+                                        highlightPluginInstance
                                     ]}
                                 />
                             </div>
