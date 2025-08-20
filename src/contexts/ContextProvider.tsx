@@ -7,6 +7,7 @@ import {ReactNode} from "react";
 import {MyUserContextProvider} from "./UserContext.tsx";
 import {MyPdfTableContextProvider} from "./PaidContexts/PdfTableContext.tsx";
 import {MyPaidPluginContextProvider} from "./PaidContexts/PaidPluginContext.tsx";
+import {MyNotesTableContextProvider} from "./PaidContexts/NotesTableContext.tsx";
 interface Props {
     children: ReactNode;
 }
@@ -15,19 +16,21 @@ const ContextProvider:React.FC<Props> = ({children}) => {
     <div>
         <MyIndexedDbContextProvider>
             <MyUserContextProvider>
-                <MyPdfTableContextProvider>
-                    <MyPluginContextProvider>
-                        <MyZipContextProvider>
-                            <MyHandlePdfContextProvider>
-                                <MyNavigatorContextProvider>
-                                    <MyPaidPluginContextProvider>
-                                        {children}
-                                    </MyPaidPluginContextProvider>
-                                </MyNavigatorContextProvider>
-                            </MyHandlePdfContextProvider>
-                        </MyZipContextProvider>
-                    </MyPluginContextProvider>
-                </MyPdfTableContextProvider>
+                <MyNotesTableContextProvider>
+                    <MyPdfTableContextProvider>
+                        <MyPluginContextProvider>
+                            <MyZipContextProvider>
+                                <MyHandlePdfContextProvider>
+                                    <MyNavigatorContextProvider>
+                                        <MyPaidPluginContextProvider>
+                                            {children}
+                                        </MyPaidPluginContextProvider>
+                                    </MyNavigatorContextProvider>
+                                </MyHandlePdfContextProvider>
+                            </MyZipContextProvider>
+                        </MyPluginContextProvider>
+                    </MyPdfTableContextProvider>
+                </MyNotesTableContextProvider>
             </MyUserContextProvider>
         </MyIndexedDbContextProvider>
 

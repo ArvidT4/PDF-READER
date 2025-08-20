@@ -37,7 +37,6 @@ const PdfWorker = () => {
         const genPdf = async () => {
             if (filePath) {
                 const signed = await generatePdfFile(filePath);
-                console.log("wtf" + signed);
                 setSigned(signed);
             }
         };
@@ -83,14 +82,14 @@ const PdfWorker = () => {
                                 <Viewer
                                     fileUrl={signedUrl}
                                     plugins={[
+                                        highlightPluginInstance,
+                                        searchPluginInstance,
                                         zoomPluginInstance,
                                         pageNavigationPluginInstance,
                                         rotatePluginInstance,
                                         thumbnailPluginInstance,
                                         fullScreenPluginInstance,
                                         bookmarkPluginInstance,
-                                        searchPluginInstance,
-                                        highlightPluginInstance
                                     ]}
                                 />
                             </div>

@@ -1,4 +1,4 @@
-import { ReactNode, createContext, useContext } from "react";
+import {ReactNode, createContext, useContext, useState} from "react";
 import * as React from "react";
 import { pageNavigationPlugin  } from "@react-pdf-viewer/page-navigation";
 import {zoomPlugin} from "@react-pdf-viewer/zoom";
@@ -17,6 +17,9 @@ import {
     RenderHighlightTargetProps
 } from "@react-pdf-viewer/highlight";
 import {Button, Position, PrimaryButton, Tooltip} from "@react-pdf-viewer/core";
+import RenderHighlight from "../../Components/paid-comps/PDF-Viewer/RenderHighlight.tsx";
+import axios, {AxiosResponse} from "axios";
+import {useNotesTableContext} from "./NotesTableContext.tsx";
 
 
 
@@ -29,8 +32,7 @@ interface IPluginContext {
     bookmarkPluginInstance:ReturnType<typeof bookmarkPlugin>;
     searchPluginInstance:ReturnType<typeof searchPlugin>;
     highlightPluginInstance:ReturnType<typeof highlightPlugin>,
-    notes:Note[],
-    setNotes:React.Dispatch<React.SetStateAction<Note[]>>,
+
     jumpToHighlightArea:(area:HighlightArea)=>void,
     //removeHighlight:(note:Note)=>void
 }
@@ -39,10 +41,7 @@ const MyContext = createContext<IPluginContext | undefined>(undefined);
 
 const MyPaidPluginContextProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
-    const [message, setMessage] = React.useState('');
-    const [notes, setNotes] = React.useState<Note[]>([]);
-    let noteId = notes.length;
-    
+    const {notes,setNotes}=useNotesTableContext()
     const pageNavigationPluginInstance = pageNavigationPlugin();
     const zoomPluginInstance = zoomPlugin()
     const rotatePluginInstance = rotatePlugin();
@@ -71,6 +70,7 @@ const MyPaidPluginContextProvider: React.FC<{ children: ReactNode }> = ({ childr
     const noteEles: Map<number, HTMLElement> = new Map();
 
 
+
     const renderHighlightTarget = (props: RenderHighlightTargetProps) => (
         <div
             style={{
@@ -95,59 +95,12 @@ const MyPaidPluginContextProvider: React.FC<{ children: ReactNode }> = ({ childr
             />
         </div>
     );
-    const renderHighlightContent = (props: RenderHighlightContentProps) => {
-        const addNote = () => {
-            if (message !== '') {
-                const note: Note = {
-                    id: ++noteId,
-                    content: message,
-                    highlightAreas: props.highlightAreas,
-                    quote: props.selectedText,
-                };
-                setNotes(notes.concat([note]));
-                props.cancel();
-            }
-        };
-
-        return (
-            <div
-                style={{
-                    background: '#fff',
-                    border: '1px solid rgba(0, 0, 0, .3)',
-                    borderRadius: '2px',
-                    padding: '8px',
-                    position: 'absolute',
-                    left: `${props.selectionRegion.left}%`,
-                    top: `${props.selectionRegion.top + props.selectionRegion.height}%`,
-                    zIndex: 1,
-                }}
-            >
-                <div>
-                    <textarea
-                        rows={3}
-                        style={{
-                            border: '1px solid rgba(0, 0, 0, .3)',
-                        }}
-                        onChange={(e) => setMessage(e.target.value)}
-                    ></textarea>
-                </div>
-                <div
-                    style={{
-                        display: 'flex',
-                        marginTop: '8px',
-                    }}
-                >
-                    <div style={{ marginRight: '8px' }}>
-                        <PrimaryButton onClick={addNote}>Add</PrimaryButton>
-                    </div>
-                    <Button onClick={props.cancel}>Cancel</Button>
-                </div>
-            </div>
-        );
-    };
+    const renderHighlightContent = (props: RenderHighlightContentProps) => (
+        <RenderHighlight {...props} setNotes={setNotes} />
+    );
     const jumpToNote = (note: Note) => {
-        if (note.highlightAreas && note.highlightAreas.length > 0) {
-            highlightPluginInstance.jumpToHighlightArea(note.highlightAreas[0]);
+        if (note.highlight_areas && note.highlight_areas.length > 0) {
+            highlightPluginInstance.jumpToHighlightArea(note.highlight_areas[0]);
         }
     };
     // const removeHighlight=(note:Note)=>{
@@ -161,7 +114,7 @@ const MyPaidPluginContextProvider: React.FC<{ children: ReactNode }> = ({ childr
         <div>
             {notes.map((note) => (
                 <React.Fragment key={note.id}>
-                    {note.highlightAreas
+                    {note.highlight_areas
                         .filter((area) => area.pageIndex === props.pageIndex)
                         .map((area, idx) => (
                             <div

@@ -2,9 +2,10 @@ import {HighlightArea} from "@react-pdf-viewer/highlight";
 
 export interface Note {
     id: number;
+    user_id:string;
+    filepath:string;
     content: string;
-    highlightAreas: HighlightArea[];
-    quote: string;
+    highlight_areas: HighlightArea[];
 }
 export interface DBNote{
     id:number,

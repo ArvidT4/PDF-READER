@@ -11,25 +11,19 @@ interface IPdfTableContext{
     handle:(file:File)=>void
     insertPdfTable:(title:string)=>void
     generatePdfFile:(filePath:string)=>Promise<string | undefined>
+    path:string
 }
 
 const MyContext = createContext<IPdfTableContext|undefined>(undefined)
 
 const MyPdfTableContextProvider: React.FC<{children:ReactNode}> = ({children})=>{
     const [pdfs,setPdfs]=useState<IMetadata[]|undefined>(undefined)
-
+    const [path,setPath]=useState<string>("")
     const [pdfFile,setPdfFile]=useState<File|undefined>(undefined);
     const allowedFiles=['application/pdf','application/zip','application/x-zip-compressed'];
     const selectedRef=useRef<File|null>(null)
 
-    const readFile=(file:File)=>{
-        let reader = new FileReader();
-        reader.readAsDataURL(file)
 
-        reader.onloadend=()=>{
-            //setPdfFile(reader.result as string);
-        }
-    }
     const handle=async (file: File)=>{
         if(file && file){
             selectedRef.current=file
@@ -53,6 +47,7 @@ const MyPdfTableContextProvider: React.FC<{children:ReactNode}> = ({children})=>
             );
 
             if (response.status === 200) {
+                setPath(filePath)
                 const blob = response.data;
                 const blobUrl = URL.createObjectURL(blob); // 👈 create URL for viewer
                 return blobUrl;
@@ -112,7 +107,8 @@ const MyPdfTableContextProvider: React.FC<{children:ReactNode}> = ({children})=>
             pdfs,
             handle,
             insertPdfTable,
-            generatePdfFile
+            generatePdfFile,
+            path
         }}>
             {children}
         </MyContext.Provider>
